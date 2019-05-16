@@ -1,8 +1,13 @@
 import operator
-import random
 
 operators = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv, "^": operator.pow}
 operators_priority = {"+": 0, "-": 0, "*": 1, "/": 1, "^": 2}
+
+
+def main():
+    exp = input("Enter expression: ")
+    rev_polish_note = reverse_polish_notation(exp)
+    print(execute(rev_polish_note))
 
 
 def execute(reverse_polish):
@@ -15,7 +20,7 @@ def execute(reverse_polish):
     return stack.pop()
 
 
-def convert_to_reverse_polish_notation(expression):
+def reverse_polish_notation(expression):
     lexemes = get_lexemes(expression)
     output = []
     stack = []
@@ -74,3 +79,7 @@ def get_lexemes(expression):
             lexemes.append(expression[i])
         i += 1
     return lexemes
+
+
+if __name__ == "__main__":
+    main()
