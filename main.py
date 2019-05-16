@@ -1,4 +1,7 @@
-operators = {"+": 0, "-": 0, "*": 1, "/": 1, "^": 2}
+import operator
+
+operators = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv, "^": operator.pow}
+operators_priority = {"+": 0, "-": 0, "*": 1, "/": 1, "^": 2}
 
 
 def check_expression(expression):
@@ -7,7 +10,6 @@ def check_expression(expression):
 
 def convert_to_reverse_polish_notation(expression):
     lexemes = get_lexemes(expression)
-    print(lexemes)
     output = []
     stack = []
     for lexeme in lexemes:
@@ -20,18 +22,12 @@ def convert_to_reverse_polish_notation(expression):
             while current_lexeme != "(":
                 output.append(current_lexeme)
                 current_lexeme = stack.pop()
-        elif lexeme in operators:
-            while stack and stack[-1] in operators and operators[stack[-1]] >= operators[lexeme]:
+        elif lexeme in operators_priority:
+            while stack and stack[-1] in operators_priority and operators_priority[stack[-1]] >= operators_priority[lexeme]:
                 output.append(stack.pop())
             stack.append(lexeme)
-        print("Lexeme", lexeme)
-        print("Stack", stack)
-        print("Output", output)
-        print()
     while stack:
         output.append(stack.pop())
-    print(output)
-    print(stack)
     return output
 
 
@@ -61,6 +57,5 @@ def get_lexemes(expression):
     return lexemes
 
 
-convert_to_reverse_polish_notation("(8+2*5.5)/(1+3*2-4^1)")
 # (8+2*5.5)/(1+3*2-4^1)
 # 825.5*+132*+41^-/
