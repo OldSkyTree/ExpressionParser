@@ -1,4 +1,5 @@
 import operator
+import random
 
 operators = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv, "^": operator.pow}
 operators_priority = {"+": 0, "-": 0, "*": 1, "/": 1, "^": 2}
@@ -73,12 +74,3 @@ def get_lexemes(expression):
             lexemes.append(expression[i])
         i += 1
     return lexemes
-
-
-exp = input("Введите выражение: ")
-rev_polish = convert_to_reverse_polish_notation(exp)
-result = execute(rev_polish)
-print("Ответ", result)
-
-# (8+2*5.5)/(1+3*2-4^1)
-# 825.5*+132*+41^-/
