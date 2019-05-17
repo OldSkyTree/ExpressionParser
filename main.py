@@ -1,13 +1,38 @@
 import operator
+import sys
+import argparse
 
 operators = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv, "^": operator.pow}
 operators_priority = {"+": 0, "-": 0, "*": 1, "/": 1, "^": 2}
 
 
 def main():
-    exp = input("Enter expression: ")
+    parser = create_parser()
+    namespace = parser.parse_args()
+    if namespace.file:
+        with open(namespace.file, "r") as file:
+            exp = file.readline()
+    elif namespace.expression:
+        exp = namespace.expression
+    else:
+        exp = input("Enter expression: ")
     rev_polish_note = reverse_polish_notation(exp)
-    print(execute(rev_polish_note))
+    print("Answer: ", execute(rev_polish_note))
+
+
+def create_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("expression", nargs="?")
+    parser.add_argument('-f', "--file")
+
+    return parser
+
+
+def check_expression(expression):
+    input_string = str(expression)
+    input_string.replace(" ", "")
+    if "," in input_string:
+        raise ValueError()
 
 
 def execute(reverse_polish):
@@ -35,7 +60,8 @@ def reverse_polish_notation(expression):
                 output.append(current_lexeme)
                 current_lexeme = stack.pop()
         elif lexeme in operators_priority:
-            while stack and stack[-1] in operators_priority and operators_priority[stack[-1]] >= operators_priority[lexeme]:
+            while stack and stack[-1] in operators_priority and \
+                    operators_priority[stack[-1]] >= operators_priority[lexeme]:
                 output.append(stack.pop())
             stack.append(lexeme)
     while stack:
