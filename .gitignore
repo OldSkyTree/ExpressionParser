@@ -69,3 +69,6 @@ fabric.properties
 
 # Virtual Environment Folder
 venv
+
+# Ignored folder for some files
+ignored
