@@ -1,5 +1,5 @@
 import operator
-import sys
+import re
 import argparse
 
 operators = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv, "^": operator.pow}
@@ -81,26 +81,10 @@ def get_lexemes(expression):
     lexemes = []
     i = 0
     while i < len(expression):
-        if len(expression) > (i + 1) and expression[i].isdigit() and expression[i + 1] == '.':
-            j = i + 2
-            while j < len(expression):
-                if not expression[j].isdigit():
-                    lexemes.append(expression[i:j])
-                    i = j - 1
-                    break
-                j += 1
-        elif len(expression) > (i + 1) and expression[i].isdigit() and expression[i + 1].isdigit():
-            j = i + 1
-            while j < len(expression):
-                if j == len(expression) - 1:
-                    lexemes.append(expression[i:j + 1])
-                    i = j
-                    break
-                elif not expression[j].isdigit():
-                    lexemes.append(expression[i:j])
-                    i = j - 1
-                    break
-                j += 1
+        number = re.match(r"[0-9]+\.*[0-9]+", expression[i:])
+        if number:
+            lexemes.append(number.group())
+            i += number.end() - 1
         else:
             lexemes.append(expression[i])
         i += 1
